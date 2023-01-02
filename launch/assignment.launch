@@ -44,26 +44,29 @@
   <group if="$(arg gui)">
     <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
   </group>
-	
-	
-   <node name="marker_server" pkg="assignment2" type="marker_server" />
    
    <!-- load robot model and spawn it in the environment -->
    <arg name="model" default="$(find assignment2)/urdf/robot_model.xacro" />
    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
-   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-xacro -model robot_model -param robot_description -x -6.0 -y -11.0"/>
+   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model robot_model -param robot_description -x -6.0 -y 11.0 -Y 3.14"/>
    
    <!-- actuate transmission on Gazebo -->
-   <rosparam file="$(find assignment2)/config/robot_model.yaml" command="load" ns="/robot" />
+   <rosparam file="$(find assignment2)/config/motor_model.yaml" command="load" ns="/robot" />
    <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="--namespace=/robot
      joint_state_controller
      joint1_position_controller 
      joint2_position_controller
+     joint3_position_controller
      --shutdown-timeout 3">
    </node>
-   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
      <remap from="joint_states" to="robot/joint_states"/>
    </node>
+   
+   <!-- Start the simulation -->
+   <node name="marker_server" pkg="assignment2" type="marker_server" />
+   <!-- node name="marker_detection" pkg="assignment2" type="marker_detection" />
+   < include assignment1 pkg lauch-->
 
 
 </launch>
