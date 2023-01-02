@@ -14,9 +14,11 @@
 	<gazebo reference="link_front_balance">
 		<material>Gazebo/Black</material>
 	</gazebo>
+
 	<gazebo reference="camera_body_link">
 		<material>Gazebo/Blue</material>
 	</gazebo>
+
 	<gazebo reference="camera_link">
 		<material>Gazebo/Blue</material>
 	</gazebo>
@@ -66,13 +68,4 @@
 			</plugin>
 		</sensor>
 	</gazebo>
-	
-	<!-- ros_control plugin for motor controller >
-	<gazebo>
-		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-			<robotNamespace>/robot</robotNamespace>
-			<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-			<legacyModeNS>true</legacyModeNS>
-		</plugin>
-	</gazebo-->
 </robot>
