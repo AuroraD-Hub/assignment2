@@ -1,5 +1,0 @@
-string command
----
-bool done
-string[] reachable_urgent
-string[] reachable_corridors
