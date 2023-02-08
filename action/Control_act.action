@@ -1,0 +1,10 @@
+#goal definition
+string loc
+---
+#result definition
+float64 x
+float64 y
+---
+#feedback 
+float64[] x
+float64[] y
