@@ -13,7 +13,7 @@ Related documentation on the code of this solution can be found here:
 ### Software tools needed
 Use [Protégé](https://protege.stanford.edu/) to directly open and read the ontology used here while with [SMACH viewer](http://wiki.ros.org/smach_viewer) it is possible to see how the architecture behaves in run-time.
 
-In order to correctly execute this possible solution, clone the [Aruco package](https://github.com/CarmineD8/aruco_ros) and the [package for autonomous navigation](https://github.com/CarmineD8/planning). Also the [ARMOR API Client](https://github.com/EmaroLab/armor_py_api) repository from EmaroLab (UNIGE) is needed to be cloned in the same workspace where this repository is downloaded. Then, copy and paste the following code in the `armor_query_client.py` file in the API `/scripts` folder:
+In order to correctly execute this possible solution, clone the [Aruco package](https://github.com/CarmineD8/aruco_ros) (modifica) and the [package for autonomous navigation](https://github.com/CarmineD8/planning). Also the [ARMOR API Client](https://github.com/EmaroLab/armor_py_api) repository from EmaroLab (UNIGE) is needed to be cloned in the same workspace where this repository is downloaded. Then, copy and paste the following code in the `armor_query_client.py` file in the API `/scripts` folder:
 ```
 def class_of_ind(self, ind, bottom):
         """
