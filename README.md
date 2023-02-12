@@ -70,6 +70,11 @@ It creates two topics to which it continuosly publishes related messages:
 
 Simulation of the battery level is defined by a while-loop that modify the boolean value to publish accordingly to a specific delay. This delay is used to simulate both the charging time and battery usage time by setting different values based on topic message published.
 
+### Map Builder
+The `build_map` node is an interface between the *Aruco_ros* package and the *[architecture state machine](#state-machine)*.
+
+It subscribes to the topic */marker_id* of the Aruco package to obtain the marker ids. These are sent to the `marker_server` service provided that gives information about the corresponding locations to add in the ontology. Once all the markers are detected, this node publishes a message in */state/ontology* topic that allows the `robot_state` node to start the battery simulation.
+
 ### Planner
 The `planner` node is a service and it plans the action that the robot should perform.  
 ![plan_component drawio](https://user-images.githubusercontent.com/72380912/204393610-7deeb839-e150-4458-a95f-ba08760f1363.jpg)  
@@ -96,13 +101,15 @@ These tasks are performed by the `controller` throught the ARMOR API Client that
 
 ### State machine
 The `state_machine` node implements the Finite State Machine that manages the behaviour of the robot.  
-![sm_component drawio](https://user-images.githubusercontent.com/72380912/204393705-51c69087-1ec5-4f9f-a4b4-65da126b77fc.jpg)  
+ 
 It subscribes to the two topics created in `robot_state` node and calls the `planner` and `controller` nodes to manipulate the ontology and move in the environment. To do that it uses the custom service requests.
 
 ## Software behaviour
 The state machine is composed of four states: *Detecting*, *Charging*, *RandomMoving* and *Waiting*. They are depicted in the following state diagram with the corresponding transitions:  
 ![state_diagram drawio](https://user-images.githubusercontent.com/72380912/204393786-5cc769b0-c536-4147-98d9-cbbd2a177a20.jpg)  
-*Detecting* state is the initial state of the architecture
+*Detecting* state is the initial state of the architecture. Robot is in location E and moves the camera to detect all the markers present in the environment. It has two outcomes:
+* *detection*: state machine stays in *Detecting* if `/state/ontolgy` topic informs it that ontology is still not ready
+* *low_battery*: state machine goes in *Charging* state whenever the ontology is complete since robot is simulated to have low battery level.
 
 In *Charging* state the robot waits in location E for the battery to get fully charged. It has two outcomes:
 * *battery_low*: state machine stays in *Charging* until `/state/battery_low` topic informs it that battery is fully charged;
@@ -138,7 +145,10 @@ In this way it is possible to see how the robot moves in the environment based o
 ## Running code explanation
 In the following video it can be seen how the architecture behaves:  
 
-
+Robot starts in *Detecting* state in which `build_map` node is active and communicating with the `marker_server` to add information retrieved by the markers to the ontology. Some spurious detection can happen, but this node will discard them and keep detecting until all seven markers are datected. When the ontology is created, the state machine calls the `controller` node to move the robot towards charging station through [move_base](http://wiki.ros.org/move_base) autonomous navigation.  
+Then, state machine goes in *Charging* state until battery is fully charged and it is informed by `/state/battery_low` topic. When it is ready, state machine calls the planner to retrive information about all the reachable locations among which it will randomly chose one and later calls the controller to move the robot in that location.  
+Now, state machine goes in *RandomMoving* state. Here, the `controller` moves the robot among CORRIDORs until an URGENT location is reachable. Whenever this location is reached, state machine goes in *Waiting* state.  
+In this state the robot rotates the camera to completely scan the room and then exit from it. Then, state machine goes in *RandomMoving* state or in *Charging* based on the battery level and previous behaviours are repeated.
 
 ## Working hypothesis
 To implement this solution, some hypothesis were made:
@@ -151,5 +161,3 @@ To implement this solution, some hypothesis were made:
 * Robot moves mainly on randomly chosen CORRIDORs unless an URGENT location is reachable.
 * An URGENT location in order to be reachable has to be directly connected with the location in which Robot1 is currently in.
 * At first, all the locations (both CORRIDORs and ROOMs) are URGENT.
-
-## Limitation and future improvements
