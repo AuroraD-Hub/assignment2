@@ -129,7 +129,7 @@ To run the assignment, open a terminal and execute:
 roslaunch assignment2 assignment2.launch 2>/dev/null
 ```  
 Every node will display its log messages in different terminals while the ARMOR Server for the API Client will be automatically launched and a new window displaying the running state diagram with SMACH Viewer will open. Also the simulation on Gazebo will start.  
-To see the robot model, open a new terminal and execute:
+To see the robot model, open a new terminal to start RViz by executing:
 ```
 roslaunch assignment2 display.launch 2>/dev/null
 ```
