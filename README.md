@@ -88,15 +88,19 @@ The `Planner_srv` message is composed as follows:
 These tasks are performed by the `planner` throught the ARMOR API Client that uses its *utils* and *query* functions for loading the ontology and exiting the location respectively.
 
 ### Controller
-The `controller` node is a service and it manages changes in the ontology when the robot moves from one location to another.  
+The `controller` node is an action and it manages changes in the ontology when the robot autonomously moves from one location to another.  
 ![control_component drawio](https://user-images.githubusercontent.com/72380912/204393660-e8414434-49f7-4772-ad48-1003293eca84.jpg)  
-The `Controller_srv` message is composed as follows:
-* Request:
+The `Controller_act` message is composed as follows:
+* Goal:
   * *loc*: is a string message that defines in which location the robot is moving to
-* Response:
-  * *done*: is a boolean message that notify when the robot moved in the new location
+* Feedback:
+  * *x*: is a float array value representing the x coordinate of the robot position
+  * *y*: is a float array value representing the y coordinate of the robot position
+* Result:
+  * *x*: is a float value representing the x coordinate of the robot goal position
+  * *y*: is a float value representing the y coordinate of the robot goal position 
 
-These tasks are performed by the `controller` throught the ARMOR API Client that uses its *manipulation* functions for updating the information about location, robot and timestamps in the ontology.
+These tasks are performed by the `controller` throught the *move_base* action client that takes as target the coordinate of the goal location and the ARMOR API Client that uses its *manipulation* functions for updating the information about location, robot and timestamps in the ontology.
 
 ### State machine
 The `state_machine` node implements the Finite State Machine that manages the behaviour of the robot.  
