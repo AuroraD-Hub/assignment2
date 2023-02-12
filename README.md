@@ -71,7 +71,7 @@ Simulation of the battery level is defined by a while-loop that modify the boole
 
 ### Map Builder
 The `build_map` node is an interface between the *Aruco_ros* package and the *[architecture state machine](#state-machine)*.
-![Diagramma senza titolo](https://user-images.githubusercontent.com/72380912/218317675-8ea73cf4-edfe-4ec6-bfdb-4a98471216e1.jpg)
+![Diagramma senza titolo](https://user-images.githubusercontent.com/72380912/218317675-8ea73cf4-edfe-4ec6-bfdb-4a98471216e1.jpg)  
 It subscribes to the topic */marker_id* of the Aruco package to obtain the marker ids. These are sent to the `marker_server` service provided that gives information about the corresponding locations to add in the ontology. Once all the markers are detected, this node publishes a message in */state/ontology* topic that allows the `robot_state` node to start the battery simulation.
 
 ### Planner
@@ -104,12 +104,12 @@ These tasks are performed by the `controller` throught the *move_base* action cl
 
 ### State machine
 The `state_machine` node implements the Finite State Machine that manages the behaviour of the robot.  
-![sm_component drawio](https://user-images.githubusercontent.com/72380912/204393705-51c69087-1ec5-4f9f-a4b4-65da126b77fc.jpg)
+![sm_component drawio](https://user-images.githubusercontent.com/72380912/204393705-51c69087-1ec5-4f9f-a4b4-65da126b77fc.jpg)  
 It subscribes to the two topics created in `robot_state` node and calls the `planner` and `controller` nodes to manipulate the ontology and move in the environment. To do that it uses the custom service requests.
 
 ## Software behaviour
 The state machine is composed of four states: *Detecting*, *Charging*, *RandomMoving* and *Waiting*. They are depicted in the following state diagram with the corresponding transitions:  
-
+![2023-02-12_16h22_58](https://user-images.githubusercontent.com/72380912/218320027-87c2d914-0fd9-44a9-b804-aedb91019178.jpg)  
 *Detecting* state is the initial state of the architecture. Robot is in location E and moves the camera to detect all the markers present in the environment. It has two outcomes:
 * *detection*: state machine stays in *Detecting* if `/state/ontolgy` topic informs it that ontology is still not ready
 * *low_battery*: state machine goes in *Charging* state whenever the ontology is complete since robot is simulated to have low battery level.
