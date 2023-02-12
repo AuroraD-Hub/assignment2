@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to ExpRobLab Assignment2’s documentation! &mdash; ExpRobLab Assignment2  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> ExpRobLab Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to ExpRobLab Assignment2’s documentation!</a></li>
+<li><a class="reference internal" href="#module-state_machine">State Machine Module</a><ul>
+<li><a class="reference internal" href="#state_machine.Charging"><code class="docutils literal notranslate"><span class="pre">Charging</span></code></a><ul>
+<li><a class="reference internal" href="#state_machine.Charging.battery_level"><code class="docutils literal notranslate"><span class="pre">Charging.battery_level()</span></code></a></li>
+<li><a class="reference internal" href="#state_machine.Charging.execute"><code class="docutils literal notranslate"><span class="pre">Charging.execute()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#state_machine.Detecting"><code class="docutils literal notranslate"><span class="pre">Detecting</span></code></a><ul>
+<li><a class="reference internal" href="#state_machine.Detecting.execute"><code class="docutils literal notranslate"><span class="pre">Detecting.execute()</span></code></a></li>
+<li><a class="reference internal" href="#state_machine.Detecting.ontology_state"><code class="docutils literal notranslate"><span class="pre">Detecting.ontology_state()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#state_machine.RandomMoving"><code class="docutils literal notranslate"><span class="pre">RandomMoving</span></code></a><ul>
+<li><a class="reference internal" href="#state_machine.RandomMoving.battery_level"><code class="docutils literal notranslate"><span class="pre">RandomMoving.battery_level()</span></code></a></li>
+<li><a class="reference internal" href="#state_machine.RandomMoving.execute"><code class="docutils literal notranslate"><span class="pre">RandomMoving.execute()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#state_machine.Waiting"><code class="docutils literal notranslate"><span class="pre">Waiting</span></code></a><ul>
+<li><a class="reference internal" href="#state_machine.Waiting.battery_level"><code class="docutils literal notranslate"><span class="pre">Waiting.battery_level()</span></code></a></li>
+<li><a class="reference internal" href="#state_machine.Waiting.execute"><code class="docutils literal notranslate"><span class="pre">Waiting.execute()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#state_machine.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-robot_state">Robot State Module</a><ul>
+<li><a class="reference internal" href="#robot_state.RobotState"><code class="docutils literal notranslate"><span class="pre">RobotState</span></code></a><ul>
+<li><a class="reference internal" href="#robot_state.RobotState.battery_notifier"><code class="docutils literal notranslate"><span class="pre">RobotState.battery_notifier()</span></code></a></li>
+<li><a class="reference internal" href="#robot_state.RobotState.is_battery_low"><code class="docutils literal notranslate"><span class="pre">RobotState.is_battery_low()</span></code></a></li>
+<li><a class="reference internal" href="#robot_state.RobotState.ontology_done"><code class="docutils literal notranslate"><span class="pre">RobotState.ontology_done()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-0">Builder Module</a><ul>
+<li><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">RobotState</span></code></a><ul>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">RobotState.battery_notifier()</span></code></a></li>
+<li><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">RobotState.is_battery_low()</span></code></a></li>
+<li><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">RobotState.ontology_done()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-planner">Planner Service</a><ul>
+<li><a class="reference internal" href="#planner.exit_from_loc"><code class="docutils literal notranslate"><span class="pre">exit_from_loc()</span></code></a></li>
+<li><a class="reference internal" href="#planner.handle_planner"><code class="docutils literal notranslate"><span class="pre">handle_planner()</span></code></a></li>
+<li><a class="reference internal" href="#planner.plan"><code class="docutils literal notranslate"><span class="pre">plan()</span></code></a></li>
+<li><a class="reference internal" href="#planner.split_str"><code class="docutils literal notranslate"><span class="pre">split_str()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-controller">Controller Action Server</a><ul>
+<li><a class="reference internal" href="#controller.Control"><code class="docutils literal notranslate"><span class="pre">Control</span></code></a><ul>
+<li><a class="reference internal" href="#controller.Control.execute"><code class="docutils literal notranslate"><span class="pre">Control.execute()</span></code></a></li>
+<li><a class="reference internal" href="#controller.Control.get_position"><code class="docutils literal notranslate"><span class="pre">Control.get_position()</span></code></a></li>
+<li><a class="reference internal" href="#controller.Control.move_to"><code class="docutils literal notranslate"><span class="pre">Control.move_to()</span></code></a></li>
+<li><a class="reference internal" href="#controller.Control.room_reached"><code class="docutils literal notranslate"><span class="pre">Control.room_reached()</span></code></a></li>
+<li><a class="reference internal" href="#controller.Control.split_str"><code class="docutils literal notranslate"><span class="pre">Control.split_str()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-param_name_mapper">Parameters Name Mapper Module</a><ul>
+<li><a class="reference internal" href="#param_name_mapper.tag_log"><code class="docutils literal notranslate"><span class="pre">tag_log()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">ExpRobLab Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Welcome to ExpRobLab Assignment2’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="welcome-to-exproblab-assignment2-s-documentation">
+<h1>Welcome to ExpRobLab Assignment2’s documentation!<a class="headerlink" href="#welcome-to-exproblab-assignment2-s-documentation" title="Permalink to this heading"></a></h1>
+<p>This is the documentation of the assignment2 package!</p>
+<div class="toctree-wrapper compound">
+</div>
+<p>modules</p>
+</div>
+<div class="section" id="module-state_machine">
+<span id="state-machine-module"></span><h1>State Machine Module<a class="headerlink" href="#module-state_machine" title="Permalink to this heading"></a></h1>
+<dl class="simple">
+<dt>The state machine is composed of three states:</dt><dd><ol class="arabic simple">
+<li><p>Charging</p></li>
+<li><p>RandomMoving</p></li>
+<li><p>Waiting</p></li>
+</ol>
+</dd>
+</dl>
+<p>All of them refers to the Planner and Controller node to execute specific commands.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="state_machine.Charging">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">state_machine.</span></span><span class="sig-name descname"><span class="pre">Charging</span></span><a class="reference internal" href="_modules/state_machine.html#Charging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.Charging" title="Permalink to this definition"></a></dt>
+<dd><p>This models state <em>Charging</em>.
+Its outcomes are:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>ready</strong>: robot goes in RandomMoving state.</p></li>
+<li><p><strong>low_battery</strong>: robot stays in Charging state.</p></li>
+</ol>
+</div></blockquote>
+<p>Here, the robot is in location <em>E</em> and is waiting some time to richarge its battery based on
+Boolean variable <em>battery_low</em>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="state_machine.Charging.battery_level">
+<span class="sig-name descname"><span class="pre">battery_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/state_machine.html#Charging.battery_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.Charging.battery_level" title="Permalink to this definition"></a></dt>
+<dd><p>Battery level subscriber callback function.
+It retrives the boolean value from Robot State Node representing if the battery level is low.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – retrive state of the battery</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="state_machine.Charging.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/state_machine.html#Charging.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.Charging.execute" title="Permalink to this definition"></a></dt>
+<dd><p>Here subscriber to topic <em>state/battery_low</em> is defined.</p>
+<p>From the subscriber current boolean value of <strong>battery_low</strong> is obtained.
+Based on this value, corresponding action from the planner or controller node are defined.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="state_machine.Detecting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">state_machine.</span></span><span class="sig-name descname"><span class="pre">Detecting</span></span><a class="reference internal" href="_modules/state_machine.html#Detecting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.Detecting" title="Permalink to this definition"></a></dt>
+<dd><p>This models state <em>Detecting</em>.
+Its outcomes are:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>detecting</strong>: robot stays in Detecting state.</p></li>
+<li><p><strong>low_battery</strong>: robot goes in Charging state.</p></li>
+</ol>
+</div></blockquote>
+<p>Here, the robot is in location <em>E</em> and is scanning the environment around it to detect
+all the markers and build the ontology. It subscribes to topic <em>state/new_ontology</em> to
+know whether the map is built through the Float variable <em>ont_needed</em>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="state_machine.Detecting.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/state_machine.html#Detecting.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.Detecting.execute" title="Permalink to this definition"></a></dt>
+<dd><p>Here subscriber to topic <em>state/new_ontology</em> is defined.</p>
+<p>From the subscriber current boolean value of <strong>ont_needed</strong> is obtained.
+Based on this value, the robot keeps detecting markers by rotating and tilting the camera
+or it goes to charging the battery.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="state_machine.Detecting.ontology_state">
+<span class="sig-name descname"><span class="pre">ontology_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/state_machine.html#Detecting.ontology_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.Detecting.ontology_state" title="Permalink to this definition"></a></dt>
+<dd><p>Load ontology subscriber callback function.
+It retrives the int value from Robot State Node representing if a new ontology is needed to be loaded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>int8</em>) – retrive state of the ontology.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="state_machine.RandomMoving">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">state_machine.</span></span><span class="sig-name descname"><span class="pre">RandomMoving</span></span><a class="reference internal" href="_modules/state_machine.html#RandomMoving"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.RandomMoving" title="Permalink to this definition"></a></dt>
+<dd><p>This models state <em>RandomMoving</em>.
+Its outcomes are:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>goal_reached</strong>: robot goes in Waiting state.</p></li>
+<li><p><strong>low_battery</strong>: robot goes in Charging state.</p></li>
+<li><p><strong>ready</strong>: robot stays in RandomMoving state.</p></li>
+</ol>
+</div></blockquote>
+<p>Here, the robot is randomly choosing a corridor to move to. If it find a reachable location which is URGENT, 
+then it calls Planner Node to move to it.
+Moreover, whenever battery level is low, it calls Planner Node to go to location <em>E</em> to recharge the battery.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="state_machine.RandomMoving.battery_level">
+<span class="sig-name descname"><span class="pre">battery_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/state_machine.html#RandomMoving.battery_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.RandomMoving.battery_level" title="Permalink to this definition"></a></dt>
+<dd><p>Battery level subscriber callback function.
+It retrives the boolean value from Robot State Node representing if the battery level is low.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – retrive state of the battery</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="state_machine.RandomMoving.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/state_machine.html#RandomMoving.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.RandomMoving.execute" title="Permalink to this definition"></a></dt>
+<dd><p>Subscribers to topic <em>state/battery_low</em> is defined.</p>
+<dl class="simple">
+<dt>Here three outcomes are possible:</dt><dd><ol class="arabic simple">
+<li><p>From the subscriber it obtaines current boolean value of <em>battery_low</em> and calls the Planner 
+Node to go in Charging state if battery is low.</p></li>
+<li><p>Defines whether there are URGENT location to visit and calls Planner Node accordingly to go in Waiting state.</p></li>
+<li><p>Otherwise it moves in a randomly chosen CORRIDOR.</p></li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="state_machine.Waiting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">state_machine.</span></span><span class="sig-name descname"><span class="pre">Waiting</span></span><a class="reference internal" href="_modules/state_machine.html#Waiting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.Waiting" title="Permalink to this definition"></a></dt>
+<dd><p>This models state <em>Waiting</em>.
+Its outcomes are:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>time_out</strong>: robot goes in RandomMoving state.</p></li>
+<li><p><strong>low_battery</strong>: robot goes in Charging state.</p></li>
+</ol>
+</div></blockquote>
+<p>Here, the robot is waiting an amount of time in the current location.
+Moreover, whenever battery level is low, it calls Planner Node to go to location <em>E</em> to recharge the battery.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="state_machine.Waiting.battery_level">
+<span class="sig-name descname"><span class="pre">battery_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/state_machine.html#Waiting.battery_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.Waiting.battery_level" title="Permalink to this definition"></a></dt>
+<dd><p>Battery level subscriber callback function.
+It retrives the boolean value from Robot State Node representing if the battery level is low.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – retrive state of the battery</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="state_machine.Waiting.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/state_machine.html#Waiting.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.Waiting.execute" title="Permalink to this definition"></a></dt>
+<dd><p>Subscriber <em>state/battery_low</em> and publisher to <em>/robot/joint3_position_controller/command</em> are defined.</p>
+<p>From the subscriber current boolean value of <em>battery_low</em> is obtained. Based on this value, 
+corresponding action from the Planner Node are defined.
+Otherwise, it patrols the room by publishing <em>camera_pos</em> in corresponding topic and then calls Planner
+Node to exit from current location.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="state_machine.main">
+<span class="sig-prename descclassname"><span class="pre">state_machine.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/state_machine.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#state_machine.main" title="Permalink to this definition"></a></dt>
+<dd><p>The state machine is initialized and started.</p>
+<p>SMACH is used to create the state machine. It has four states and transitions between
+one another are defined.
+The Introspection Server is also cretated for visualization purpouse.
+At last, the state machine is executed and it runs untill the application is stopped.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-robot_state">
+<span id="robot-state-module"></span><h1>Robot State Module<a class="headerlink" href="#module-robot_state" title="Permalink to this heading"></a></h1>
+<p>This node simulates the robot state by defining battery level and new ontology needed.
+For this purpose, it publishs to topics to which the state machine subscribes:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><em>state/new_ontology</em>: it defines if a new ontology has to be loaded</p></li>
+<li><p><em>state/battery_low</em>: it defines if battery level of the robot is low</p></li>
+</ol>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="robot_state.RobotState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">robot_state.</span></span><span class="sig-name descname"><span class="pre">RobotState</span></span><a class="reference internal" href="_modules/robot_state.html#RobotState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#robot_state.RobotState" title="Permalink to this definition"></a></dt>
+<dd><p>Robot state is simulated and communicated to other nodes by custom topics.</p>
+<p>Topics run in different threads such that stimuli can be communicated real-time like.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="robot_state.RobotState.battery_notifier">
+<span class="sig-name descname"><span class="pre">battery_notifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pub_battery</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/robot_state.html#RobotState.battery_notifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#robot_state.RobotState.battery_notifier" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function used to simulate battery usage and recharging time.
+It implements a while loop in which usage and recharging time is simulated based
+on the value obtained by the topic. It also prints related messages to let the
+user know battery state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pub_battery</strong> – publisher to the <em>state/battery_low</em> topic</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="robot_state.RobotState.is_battery_low">
+<span class="sig-name descname"><span class="pre">is_battery_low</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/robot_state.html#RobotState.is_battery_low"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#robot_state.RobotState.is_battery_low" title="Permalink to this definition"></a></dt>
+<dd><p>Callback function for the new thread in which battery level is simulated.</p>
+<p>It defines a lathered publisher to the <em>state/battery_low</em> topic and uses
+the helper function :mod:’_battery_notifier’ to simulate battery usage and 
+recharging time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="robot_state.RobotState.ontology_done">
+<span class="sig-name descname"><span class="pre">ontology_done</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/robot_state.html#RobotState.ontology_done"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#robot_state.RobotState.ontology_done" title="Permalink to this definition"></a></dt>
+<dd><p>Callback function for <em>/state/ontology</em> topic.</p>
+<p>It is used to start the battery level simulation right after the marker detection 
+has finished.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-0">
+<span id="builder-module"></span><h1>Builder Module<a class="headerlink" href="#module-0" title="Permalink to this heading"></a></h1>
+<p>This node simulates the robot state by defining battery level and new ontology needed.
+For this purpose, it publishs to topics to which the state machine subscribes:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><em>state/new_ontology</em>: it defines if a new ontology has to be loaded</p></li>
+<li><p><em>state/battery_low</em>: it defines if battery level of the robot is low</p></li>
+</ol>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">robot_state.</span></span><span class="sig-name descname"><span class="pre">RobotState</span></span><a class="reference internal" href="_modules/robot_state.html#RobotState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>Robot state is simulated and communicated to other nodes by custom topics.</p>
+<p>Topics run in different threads such that stimuli can be communicated real-time like.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">battery_notifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pub_battery</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/robot_state.html#RobotState.battery_notifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function used to simulate battery usage and recharging time.
+It implements a while loop in which usage and recharging time is simulated based
+on the value obtained by the topic. It also prints related messages to let the
+user know battery state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pub_battery</strong> – publisher to the <em>state/battery_low</em> topic</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">is_battery_low</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/robot_state.html#RobotState.is_battery_low"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dd><p>Callback function for the new thread in which battery level is simulated.</p>
+<p>It defines a lathered publisher to the <em>state/battery_low</em> topic and uses
+the helper function :mod:’_battery_notifier’ to simulate battery usage and 
+recharging time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">ontology_done</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/robot_state.html#RobotState.ontology_done"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition"></a></dt>
+<dd><p>Callback function for <em>/state/ontology</em> topic.</p>
+<p>It is used to start the battery level simulation right after the marker detection 
+has finished.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-planner">
+<span id="planner-service"></span><h1>Planner Service<a class="headerlink" href="#module-planner" title="Permalink to this heading"></a></h1>
+<p>Here a service defining the controller of the architecture is created.
+It plans actions based on which command the state machine is giving by querying
+information about the ontology through the aRMOR API client by EmaroLab.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="planner.exit_from_loc">
+<span class="sig-prename descclassname"><span class="pre">planner.</span></span><span class="sig-name descname"><span class="pre">exit_from_loc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/planner.html#exit_from_loc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#planner.exit_from_loc" title="Permalink to this definition"></a></dt>
+<dd><p>The planner queries all reachable locations.</p>
+<p>It defines which location are URGENT and which are just CORRIDORS and give them in response</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="planner.handle_planner">
+<span class="sig-prename descclassname"><span class="pre">planner.</span></span><span class="sig-name descname"><span class="pre">handle_planner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/planner.html#handle_planner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#planner.handle_planner" title="Permalink to this definition"></a></dt>
+<dd><p>Service callback.    
+The planner executes two different action based on what the state machine needs:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>load</strong>: it loads an available ontology</p></li>
+<li><p><strong>exit</strong>: it exits from the current location</p></li>
+</ol>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>req</strong> (<em>Planner_srv</em>) – The request of the service</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="planner.plan">
+<span class="sig-prename descclassname"><span class="pre">planner.</span></span><span class="sig-name descname"><span class="pre">plan</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/planner.html#plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#planner.plan" title="Permalink to this definition"></a></dt>
+<dd><p>Planner node initialized.</p>
+<p>Here, service planner is instantiated.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="planner.split_str">
+<span class="sig-prename descclassname"><span class="pre">planner.</span></span><span class="sig-name descname"><span class="pre">split_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/planner.html#split_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#planner.split_str" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function used to get queried object from string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>string</strong> (<em>string</em>) – The string to split to get information needed</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-controller">
+<span id="controller-action-server"></span><h1>Controller Action Server<a class="headerlink" href="#module-controller" title="Permalink to this heading"></a></h1>
+<p>The controller is a SimpleActionServer that manages the motion of the robot:
+it publishes feddbeck on the position and modifies the ontology whenever the
+goal is reached.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="controller.Control">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">controller.</span></span><span class="sig-name descname"><span class="pre">Control</span></span><a class="reference internal" href="_modules/controller.html#Control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#controller.Control" title="Permalink to this definition"></a></dt>
+<dd><p>Controller node.</p>
+<p>The controller communicates with the state machine to give command to <em>move_base</em>
+action client such to autonomously move the robot in the environment.
+It subscribes to <em>/odom</em> topic and it publishes feedback on robot position. Once
+<em>move_base</em> finished the action, the Controller publishes the result also in
+<em>/state/position</em> topic.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="controller.Control.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">goal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/controller.html#Control.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#controller.Control.execute" title="Permalink to this definition"></a></dt>
+<dd><p>Here, the action client of <em>move_base</em> is initialized and the goal position is 
+obtained by the ontology.</p>
+<p>The Controller publishes feedback on robot position and retrieve the goal position
+by querying the ontology. Then, it gives the coordinates to the action client of <em>move_base</em>
+that moves autonomously the robot towards them. Finally, it publishes the last position
+reached in the <em>state/position</em> topic</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="controller.Control.get_position">
+<span class="sig-name descname"><span class="pre">get_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/controller.html#Control.get_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#controller.Control.get_position" title="Permalink to this definition"></a></dt>
+<dd><p>Odometry subscriber callback function.
+It retrives the current position in the <em>odom</em> frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>Odometry</em>) – retrive odometry information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="controller.Control.move_to">
+<span class="sig-name descname"><span class="pre">move_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mb_target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/controller.html#Control.move_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#controller.Control.move_to" title="Permalink to this definition"></a></dt>
+<dd><p>Controller calls <em>move_base</em> action client to move the robot.
+It sets the target position to be given to <em>move_base</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos_x</strong> – x coordinate of the target.</p></li>
+<li><p><strong>pos_y</strong> – y coordinate of the target.</p></li>
+<li><p><strong>mb_target</strong> – <em>move_base</em> input command.</p></li>
+<li><p><strong>move_client</strong> – <em>move_base</em> client.</p></li>
+<li><p><strong>goal</strong> – target information in the ontology.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="controller.Control.room_reached">
+<span class="sig-name descname"><span class="pre">room_reached</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">goal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/controller.html#Control.room_reached"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#controller.Control.room_reached" title="Permalink to this definition"></a></dt>
+<dd><p>The controller modifies the ontology when it reaches the goal location.
+It updates the timestamp and the position of the robot in the ondtology.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>goal</strong> – istance of the ontology representing the goal to reach.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="controller.Control.split_str">
+<span class="sig-name descname"><span class="pre">split_str</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/controller.html#Control.split_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#controller.Control.split_str" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function used to get queried object from string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>string</strong> (<em>string</em>) – The string to split to get information needed</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-param_name_mapper">
+<span id="parameters-name-mapper-module"></span><h1>Parameters Name Mapper Module<a class="headerlink" href="#module-param_name_mapper" title="Permalink to this heading"></a></h1>
+<p>Here are defined names of parameters used in every module of the architecture.
+It also defines a function to output messages on terminal while knowing which
+module print it.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="param_name_mapper.tag_log">
+<span class="sig-prename descclassname"><span class="pre">param_name_mapper.</span></span><span class="sig-name descname"><span class="pre">tag_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">producer_tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/param_name_mapper.html#tag_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#param_name_mapper.tag_log" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function to print on terminal specifying which module is writing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str.</em>) – The message to print.</p></li>
+<li><p><strong>producer_tag</strong> (<em>str.</em>) – It defines which module is printing the message.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Aurora Durante.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
