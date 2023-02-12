@@ -8,13 +8,13 @@ In this assignment a ROS-based software architecture for a robot with surveillan
 It is based on the **OWL-DL** approach to create an ontology of the environment and it uses [SMACH](http://wiki.ros.org/smach) to implement a **Finite State Machine** to control robot behaviour. The ontology is visible with Protégé and the architecture behaviour is based on [ARMOR](https://github.com/EmaroLab/armor).
 
 Related documentation on the code of this solution can be found here:  
-(ExpRobLab Assignment2 Documentation)[https://aurorad-hub.github.io/assignment2/]
+[ExpRobLab Assignment2 Documentation](https://aurorad-hub.github.io/assignment2/)
 
 ### Software tools needed
 Use [Protégé](https://protege.stanford.edu/) to directly open and read the ontology used here while with [SMACH viewer](http://wiki.ros.org/smach_viewer) it is possible to see how the architecture behaves in run-time.
 
 In order to correctly execute this possible solution, clone the [package for autonomous navigation](https://github.com/CarmineD8/planning).  
-Then, the [Aruco package](https://github.com/CarmineD8/aruco_ros) and substitue the file *marker_publisher.cpp* in `aruco_ros/` with the one that can be found in this repository.   
+Then, the [Aruco package](https://github.com/CarmineD8/aruco_ros) and substitue the file *marker_publisher.cpp* in `aruco_ros/aruco_ros/src` with the one that can be found in this repository.   
 Also the [ARMOR API Client](https://github.com/EmaroLab/armor_py_api) repository from EmaroLab (UNIGE) is needed to be cloned in the same workspace where this repository is downloaded. Then, copy and paste the following code in the `armor_query_client.py` file in the API `/scripts` folder:
 ```
 def class_of_ind(self, ind, bottom):
