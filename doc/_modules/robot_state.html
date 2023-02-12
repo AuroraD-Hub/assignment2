@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>robot_state &mdash; ExpRobLab Assignment2  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ExpRobLab Assignment2
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ExpRobLab Assignment2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">robot_state</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for robot_state</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module::robot_state</span>
+<span class="sd">   :platform: Ubuntu 20.04</span>
+<span class="sd">   :snyopsis: This module simulates robot state.</span>
+
+<span class="sd">.. moduleauthor::Aurora Durante</span>
+
+<span class="sd">This node simulates the robot state by defining battery level and new ontology needed.</span>
+<span class="sd">For this purpose, it publishs to topics to which the state machine subscribes:</span>
+<span class="sd"> 1) *state/new_ontology*: it defines if a new ontology has to be loaded</span>
+<span class="sd"> 2) *state/battery_low*: it defines if battery level of the robot is low</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">rospy</span>
+<span class="kn">from</span> <span class="nn">std_msgs.msg</span> <span class="kn">import</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Int8</span><span class="p">,</span> <span class="n">Float64</span>
+<span class="kn">from</span> <span class="nn">assignment2.msg</span> <span class="kn">import</span> <span class="n">Position</span>
+<span class="kn">import</span> <span class="nn">param_name_mapper</span> <span class="k">as</span> <span class="nn">pnm</span>
+
+<div class="viewcode-block" id="RobotState"><a class="viewcode-back" href="../index.html#robot_state.RobotState">[docs]</a><span class="k">class</span> <span class="nc">RobotState</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Robot state is simulated and communicated to other nodes by custom topics.</span>
+
+<span class="sd">    Topics run in different threads such that stimuli can be communicated real-time like.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Here, the node is initialized and publishers defined.</span>
+        <span class="c1">#Two threads are started and each one refers to a specific publisher that publishes</span>
+        <span class="c1">#messages on the corresponding topic. Publishers are:</span>
+        <span class="c1"># * *pub_ont*: it publishes on *state/new_ontology* topic</span>
+        <span class="c1"># * *pub_battery*: it publishes on *state/battery_low* topic</span>
+        <span class="c1"># * *pub_pos*: it publishes on *state/position* topic</span>
+        <span class="c1">#The corresponding messages are:</span>
+        <span class="c1"># * *ont_needed* (int8): defines if a new ontology is needed to be loaded (initialized as 1).</span>
+        <span class="c1"># * *battery_low* (bool): define if battery level of the robot is low (initialized as True).</span>
+        <span class="c1"># * *pos* (float64): define the position of the robot (initialized as [-6.0, 11.0]).</span>
+           
+        <span class="c1"># Initialise this node.</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="n">pnm</span><span class="o">.</span><span class="n">NODE_ROBOT_STATE</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="n">rospy</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        
+        <span class="c1"># Initialise ontology state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ont_needed</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">pub_ont</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="n">pnm</span><span class="o">.</span><span class="n">TOPIC_LOAD_ONTOLOGY</span><span class="p">,</span> <span class="n">Int8</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">latch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pub_ont</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ont_needed</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ont_needed</span><span class="p">:</span>
+          <span class="n">log_msg</span> <span class="o">=</span> <span class="s1">&#39;New ontology is needed&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">log_msg</span> <span class="o">=</span> <span class="s1">&#39;No new ontology is needed&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_print_info</span><span class="p">(</span><span class="n">log_msg</span><span class="p">)</span>
+        
+        <span class="c1"># Initialise robot position</span>
+        <span class="n">pub_pos</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="n">pnm</span><span class="o">.</span><span class="n">TOPIC_POSITION</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">latch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">Position</span><span class="p">()</span>
+        <span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">pnm</span><span class="o">.</span><span class="n">INITIAL_POSITION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">pos</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">pnm</span><span class="o">.</span><span class="n">INITIAL_POSITION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">pub_pos</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        
+        <span class="c1"># Initialise battery level.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_battery_low</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">sub_ont</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="n">pnm</span><span class="o">.</span><span class="n">TOPIC_LOAD_ONTOLOGY</span><span class="p">,</span> <span class="n">Int8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology_done</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="RobotState.ontology_done"><a class="viewcode-back" href="../index.html#robot_state.RobotState.ontology_done">[docs]</a>    <span class="k">def</span> <span class="nf">ontology_done</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback function for */state/ontology* topic.</span>
+<span class="sd">    </span>
+<span class="sd">        It is used to start the battery level simulation right after the marker detection </span>
+<span class="sd">        has finished.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    	<span class="bp">self</span><span class="o">.</span><span class="n">_ont_needed</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span>
+    	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ont_needed</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_print_info</span><span class="p">(</span><span class="s1">&#39;Ontology is built&#39;</span><span class="p">)</span>
+          <span class="c1"># Start battery publisher on a separate thread.</span>
+          <span class="n">th</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">is_battery_low</span><span class="p">)</span>
+          <span class="n">th</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="RobotState.is_battery_low"><a class="viewcode-back" href="../index.html#robot_state.RobotState.is_battery_low">[docs]</a>    <span class="k">def</span> <span class="nf">is_battery_low</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback function for the new thread in which battery level is simulated.</span>
+<span class="sd">    </span>
+<span class="sd">        It defines a lathered publisher to the *state/battery_low* topic and uses</span>
+<span class="sd">        the helper function :mod:&#39;_battery_notifier&#39; to simulate battery usage and </span>
+<span class="sd">        recharging time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Define a `lathed` publisher to wait for initialisation and publish immediately.</span>
+        <span class="n">pub_battery</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="n">pnm</span><span class="o">.</span><span class="n">TOPIC_BATTERY_LOW</span><span class="p">,</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">latch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Publish battery level changes randomly.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">battery_notifier</span><span class="p">(</span><span class="n">pub_battery</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="RobotState.battery_notifier"><a class="viewcode-back" href="../index.html#robot_state.RobotState.battery_notifier">[docs]</a>    <span class="k">def</span> <span class="nf">battery_notifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pub_battery</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function used to simulate battery usage and recharging time.</span>
+<span class="sd">        It implements a while loop in which usage and recharging time is simulated based</span>
+<span class="sd">        on the value obtained by the topic. It also prints related messages to let the</span>
+<span class="sd">        user know battery state.</span>
+<span class="sd">      </span>
+<span class="sd">        :param pub_battery: publisher to the *state/battery_low* topic</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Initialised to 0 just for logging purposes.</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+            <span class="c1"># Publish battery level.</span>
+            <span class="n">pub_battery</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">Bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_battery_low</span><span class="p">))</span>
+            <span class="c1"># Log state.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_battery_low</span><span class="p">:</span>
+                <span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Robot got low battery after </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s1"> seconds.&#39;</span>
+                <span class="n">delay</span> <span class="o">=</span> <span class="mi">15</span> <span class="c1"># simulate time needed to recharge</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Robot got a fully charged battery after </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s1"> seconds.&#39;</span>
+                <span class="n">delay</span> <span class="o">=</span> <span class="mi">50</span> <span class="c1"># simulate battery usage time</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_print_info</span><span class="p">(</span><span class="n">log_msg</span><span class="p">)</span>
+            <span class="c1"># Wait to simulate battery usage.</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+            <span class="c1"># Change battery state.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_battery_low</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_battery_low</span></div>
+    
+    <span class="c1"># Print logging only when random testing is active.</span>
+    <span class="c1"># This is done to allow an intuitive usage of the keyboard-based interface.</span>
+    <span class="k">def</span> <span class="nf">_print_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         Helper function used to print terminal messages regarding robot state.</span>
+<span class="sd">    </span>
+<span class="sd">         :param msg: it containes the message to print on terminal.</span>
+<span class="sd">         :type msg: string</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+         <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="n">pnm</span><span class="o">.</span><span class="n">tag_log</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">pnm</span><span class="o">.</span><span class="n">NODE_ROBOT_STATE</span><span class="p">))</span></div>
+        
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Instantiate the node manager class and wait.</span>
+    <span class="n">RobotState</span><span class="p">()</span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Aurora Durante.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
