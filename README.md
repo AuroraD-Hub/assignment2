@@ -56,10 +56,9 @@ It is composed of four nodes:
 * *planner*: this service plans the necessary action that the robot should perform in a specific state and based on the stimuli;
 * *controller*: this service executes actions such that the robot moves in the environment.
 
-There is also a *param_name_mapper* interface that collects all the necessary information regarding names of the topics and services and values of parameters used in all the architecture. Moreover, *build_map*, *planner* and *controller* use the ARMOR API Client from EmaroLab.  
-In the following components diagram it can be seen how these nodes interact:
-![sw_architecture drawio](https://user-images.githubusercontent.com/72380912/204393486-a1d3392a-8ad5-47a4-bb35-e65b45778ddf.jpg)
-
+There is also a *param_name_mapper* interface that collects all the necessary information regarding names of the topics and services and values of parameters used in all the architecture. Moreover, *build_map*, *planner* and *controller* use the ARMOR API Client from EmaroLab and *build_map* use a provided service that let it communicate with the Aruco package.  
+In the following components diagram it can be seen how these implemented nodes interact:
+![arc](https://user-images.githubusercontent.com/72380912/218319228-65c19bca-6a89-4b70-a2ae-c3dd31246728.jpg)
 
 ### Robot state
 The `robot_state` node is a publisher and it simulates stimuli of the robot as battery level and ontology state.
