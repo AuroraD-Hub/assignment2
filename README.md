@@ -15,38 +15,7 @@ Use [Protégé](https://protege.stanford.edu/) to directly open and read the ont
 
 In order to correctly execute this possible solution, clone the [package for autonomous navigation](https://github.com/CarmineD8/planning).  
 Then, the [Aruco package](https://github.com/CarmineD8/aruco_ros) and substitue the file *marker_publisher.cpp* in `aruco_ros/aruco_ros/src` with the one that can be found in this repository. Moreover, copy the marker models in `aruco_ros/aruco_ros/models` in your local gazebo folder (`/root/.gazebo/models`).   
-Also the [ARMOR API Client](https://github.com/EmaroLab/armor_py_api) repository from EmaroLab (UNIGE) is needed to be cloned in the same workspace where this repository is downloaded. Then, copy and paste the following code in the `armor_query_client.py` file in the API `/scripts` folder:
-```
-def class_of_ind(self, ind, bottom):
-        """
-        Query which class an individuals belong to.
-    
-        Args:
-            ind(str): an individual of the ontology
-            bottom(bool): 
-    
-        Returns:
-            list(str): the class of the individual
-    
-        Raises:
-            armor_api.exceptions.ArmorServiceCallError: if call to ARMOR fails.
-            armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error.
-        """
-        try:
-            res = self._client.call('QUERY', 'CLASS', 'IND', [ind, bottom])
-    
-        except rospy.ServiceException:
-            raise ArmorServiceCallError(
-                "Service call failed upon querying individuals belonging to class {0}".format(ind, bottom))
-    
-        except rospy.ROSException:
-            raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
-    
-        if res.success:
-            return res.queried_objects
-        else:
-            raise ArmorServiceInternalError(res.error_description, res.exit_code)
-```
+Also the [ARMOR API Client](https://github.com/EmaroLab/armor_py_api) repository from EmaroLab (UNIGE) is needed to be cloned in the same workspace where this repository is downloaded. 
 
 ## Software robot architecture
 It is composed of four nodes:
@@ -146,8 +115,6 @@ roslaunch assignment2 display.launch 2>/dev/null
 In this way it is possible to see how the robot moves in the environment based on the information given by specific topics.
 
 ## Running code explanation
-In the following video it can be seen how the architecture behaves:  
-
 Robot starts in *Detecting* state in which `build_map` node is active and communicating with the `marker_server` to add information retrieved by the markers to the ontology. Some spurious detection can happen, but this node will discard them and keep detecting until all seven markers are datected. When the ontology is created, the state machine calls the `controller` node to move the robot towards charging station through [move_base](http://wiki.ros.org/move_base) autonomous navigation.  
 Then, state machine goes in *Charging* state until battery is fully charged and it is informed by `/state/battery_low` topic. When it is ready, state machine calls the planner to retrive information about all the reachable locations among which it will randomly chose one and later calls the controller to move the robot in that location.  
 Now, state machine goes in *RandomMoving* state. Here, the `controller` moves the robot among CORRIDORs until an URGENT location is reachable. Whenever this location is reached, state machine goes in *Waiting* state.  
