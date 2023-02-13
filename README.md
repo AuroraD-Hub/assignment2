@@ -131,3 +131,6 @@ To implement this solution, some hypothesis were made:
 * Robot moves mainly on randomly chosen CORRIDORs unless an URGENT location is reachable.
 * An URGENT location in order to be reachable has to be directly connected with the location in which Robot1 is currently in.
 * At first, all the locations (both CORRIDORs and ROOMs) are URGENT.
+
+## Limitations
+It may happen that errors occurs in the `controller` and `planner` terminals. They are due to some internal fails of the aRMOR API and restarting the architecture should be enough to solve them.  
